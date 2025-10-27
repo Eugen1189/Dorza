@@ -2,17 +2,20 @@
 
 import CampaignForm from '@/components/CampaignForm';
 import { useState } from 'react';
+import { API_ENDPOINTS } from '@/lib/config';
 
 export default function Home() {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (formData) => {
     setLoading(true);
     setResponse(null);
+    setError(null);
 
     try {
-      const res = await fetch('http://localhost:8000/api/generate', {
+      const res = await fetch(API_ENDPOINTS.generate, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,11 +23,15 @@ export default function Home() {
         body: JSON.stringify(formData),
       });
 
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const data = await res.json();
       setResponse(data);
     } catch (error) {
       console.error('Помилка відправки форми:', error);
-      setResponse({
+      setError({
         status: 'ERROR',
         message: 'Не вдалося відправити дані на сервер',
         error: error.message,
@@ -43,7 +50,20 @@ export default function Home() {
         
         {loading && (
           <div className="mt-4 text-center">
-            <p className="text-blue-600">Відправка даних...</p>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="text-blue-600 mt-2">Відправка даних...</p>
+          </div>
+        )}
+        
+        {error && (
+          <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg shadow-lg max-w-2xl mx-auto">
+            <h3 className="text-xl font-bold mb-2 text-red-800">Помилка:</h3>
+            <p className="text-red-600">{error.message}</p>
+            {error.error && (
+              <pre className="mt-2 text-sm bg-red-100 p-2 rounded overflow-auto">
+                {error.error}
+              </pre>
+            )}
           </div>
         )}
         
