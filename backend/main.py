@@ -15,7 +15,7 @@ app = FastAPI(title="Dorza AI Campaign Generator API", version="0.1.0")
 # CORS configuration for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # Vite and other ports
+    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://localhost:5173"],  # Next.js, Vite and other ports
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
