@@ -18,7 +18,7 @@ class CampaignInput(BaseModel):
 
     class Config:
         # Дозволяє використовувати Pydantic як джерело схеми для OpenAPI
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "business_name": "ProForma Labs",
                 "product_service": "Кастомні 3D-прототипи з біопластику",
