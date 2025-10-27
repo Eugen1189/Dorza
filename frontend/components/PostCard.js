@@ -72,6 +72,37 @@ const PostCard = ({ postData, index }) => {
           </div>
         </div>
 
+        {/* Generated Image Display */}
+        {postData.image_url && (
+          <div className="glass p-6 rounded-2xl mb-6 border border-emerald-500/30 bg-emerald-900/10">
+            <div className="flex justify-between items-center mb-4">
+              <div className="font-bold text-emerald-300 text-sm uppercase tracking-wider flex items-center gap-2">
+                Immagine Generata
+              </div>
+              <a 
+                href={postData.image_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="px-4 py-2 glass rounded-lg hover:bg-emerald-900/30 transition-all duration-300 text-emerald-200 font-semibold text-sm border border-emerald-500/50"
+              >
+                Apri
+              </a>
+            </div>
+            <img 
+              src={postData.image_url} 
+              alt="Generated for campaign" 
+              className="w-full rounded-xl shadow-xl border-2 border-emerald-500/30"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'block';
+              }}
+            />
+            <div style={{display: 'none'}} className="text-emerald-400 text-sm italic text-center py-4">
+              Immagine non disponibile
+            </div>
+          </div>
+        )}
+
         {/* Additional Info */}
         <div className="grid md:grid-cols-2 gap-6">
           {/* Image Prompt */}

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Literal, List
+from typing import Literal, List, Optional
 
 class CampaignInput(BaseModel):
     """Model for data sent from frontend form."""
@@ -43,6 +43,7 @@ class PostOutput(BaseModel):
     
     # 1. Visual part
     image_prompt: str = Field(..., description="Detailed prompt for image generator (Midjourney/DALL-E), illustrating the topic.")
+    image_url: Optional[str] = Field(None, description="URL of the generated image (optional, added when image generation is enabled)")
     
     # 2. Texts for platforms
     facebook_text: str = Field(..., description="Post text optimized for Facebook (medium length, call for discussion).")

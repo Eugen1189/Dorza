@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from models import CampaignInput, StrategyBrief, PostOutput, FinalCampaignOutput
 import os
 import json
+import base64
+import requests
 
 # Load environment variables
 load_dotenv()
@@ -52,6 +54,35 @@ def root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy", "service": "campaign-generator"}
+
+# --- IMAGE GENERATION FUNCTION ---
+
+def generate_image_with_imagen(prompt: str) -> str:
+    """
+    Generate an image using Google's Imagen 3 API.
+    Returns the URL of the generated image or None if generation fails.
+    """
+    if not API_KEY:
+        print("Warning: API_KEY not available for image generation")
+        return None
+    
+    try:
+        # Use Imagen 3 via Vertex AI (requires different setup)
+        # For now, we'll use a placeholder approach
+        # In production, you would use Google Cloud Vertex AI SDK
+        
+        # Alternative: Use DALL-E 3 via OpenAI (requires OpenAI API key)
+        # For MVP, we'll return None and keep image_url as optional
+        
+        print(f"Image generation requested for prompt: {prompt[:100]}...")
+        print("Note: Image generation requires additional API setup (OpenAI DALL-E or Google Imagen)")
+        
+        # Placeholder: Return None to indicate image generation is not yet implemented
+        return None
+        
+    except Exception as e:
+        print(f"Error generating image: {e}")
+        return None
 
 # --- ROUTE 3.1 & 3.2: Strategy Agent + Content Adapters ---
 
@@ -157,8 +188,18 @@ async def generate_content(input_data: CampaignInput):
                 config=config_post,
             )
             
-            # Parse and add final post to list
-            final_posts.append(PostOutput.model_validate_json(response_post.text))
+            # Parse PostOutput from JSON response
+            post_data = PostOutput.model_validate_json(response_post.text)
+            
+            # Generate image for this post (optional, may return None)
+            image_url = generate_image_with_imagen(post_data.image_prompt)
+            
+            # Update post with generated image URL if available
+            if image_url:
+                post_data.image_url = image_url
+            
+            # Add final post to list
+            final_posts.append(post_data)
 
         # --- STAGE 4: Final Campaign Assembly ---
         
