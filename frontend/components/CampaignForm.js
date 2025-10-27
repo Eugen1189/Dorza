@@ -14,15 +14,33 @@ const CampaignForm = ({ onSubmit }) => {
     num_posts: 3,
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState({ success: null, message: '' });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // На цьому етапі викликаємо функцію onSubmit, яка відправить дані на FastAPI
-    onSubmit(formData);
+    
+    // Блокування форми та показ завантаження
+    setIsSubmitting(true);
+    setStatus({ success: null, message: '' });
+
+    try {
+      // Викликаємо функцію onSubmit, яка відправить дані на FastAPI
+      await onSubmit(formData);
+    } catch (error) {
+      console.error('Помилка при відправці форми:', error);
+      setStatus({ 
+        success: false, 
+        message: 'Помилка при відправці даних на сервер' 
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -159,8 +177,33 @@ const CampaignForm = ({ onSubmit }) => {
         </div>
       </fieldset>
 
-      <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">
-        🚀 Запустити AI-Генерацію (Крок 1/4)
+      {status.message && (
+        <div className={`mb-4 p-3 rounded ${
+          status.success 
+            ? 'bg-green-100 text-green-800 border border-green-300' 
+            : 'bg-red-100 text-red-800 border border-red-300'
+        }`}>
+          {status.message}
+        </div>
+      )}
+
+      <button 
+        type="submit" 
+        disabled={isSubmitting}
+        className={`w-full py-3 rounded-lg transition ${
+          isSubmitting 
+            ? 'bg-gray-400 cursor-not-allowed' 
+            : 'bg-blue-600 hover:bg-blue-700'
+        } text-white`}
+      >
+        {isSubmitting ? (
+          <>
+            <span className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+            Відправка...
+          </>
+        ) : (
+          '🚀 Запустити AI-Генерацію (Крок 1/4)'
+        )}
       </button>
     </form>
   );
