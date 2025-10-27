@@ -37,12 +37,12 @@ export default function Home() {
         console.error('Error from Backend:', result);
         const errorMessage = Array.isArray(result.detail) 
           ? result.detail[0].msg || 'Error from API'
-          : result.detail || 'Error sending data';
+          : (typeof result.detail === 'string' ? result.detail : 'Error sending data');
         
         setError({
           status: 'ERROR',
           message: errorMessage,
-          error: result,
+          details: result.detail,
         });
       }
     } catch (error) {
@@ -50,7 +50,7 @@ export default function Home() {
       setError({
         status: 'ERROR',
         message: "Impossibile connettersi al server.",
-        error: error.message,
+        details: error.message,
       });
       throw error;
     } finally {
@@ -116,9 +116,9 @@ export default function Home() {
                   Errore di connessione
                 </h3>
                 <p className="text-red-200">{error.message}</p>
-                {error.error && (
+                {error.details && (
                   <pre className="mt-4 text-sm bg-black/40 p-4 rounded-xl overflow-auto text-red-300 border border-red-500/30">
-                    {error.error}
+                    {JSON.stringify(error.details, null, 2)}
                   </pre>
                 )}
               </div>
