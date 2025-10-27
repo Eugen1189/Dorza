@@ -6,50 +6,50 @@ from dotenv import load_dotenv
 from models import CampaignInput
 import os
 
-# Завантажуємо змінні оточення
+# Load environment variables
 load_dotenv()
 
-# Ініціалізуємо FastAPI додаток
+# Initialize FastAPI application
 app = FastAPI(title="Dorza AI Campaign Generator")
 
-# Налаштування CORS для фронтенду
+# CORS configuration for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # Vite та інші порти
+    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # Vite and other ports
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Модель для відповіді
+# Response model
 class CampaignResponse(BaseModel):
     success: bool
     message: str
     data: Optional[dict] = None
 
-# Базовий ендпоінт для перевірки роботи
+# Basic endpoint for testing
 @app.get("/")
 async def root():
     return {"message": "Dorza AI Campaign Generator API is running"}
 
-# Health check ендпоінт
+# Health check endpoint
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "service": "campaign-generator"}
 
-# Ендпоінт для генерації соціальних медіа (заготовка для Фази 2)
+# Social media generation endpoint (placeholder for Phase 2)
 @app.post("/api/generate")
 async def generate_social_media_content(input_data: CampaignInput):
     """
-    Базовий маршрут, що приймає вхідні дані та повертає OK.
-    (На Фазі 2 тут буде інтегрована логіка Gemini)
+    Basic route that receives input data and returns OK.
+    (Gemini logic will be integrated here in Phase 2)
     """
-    print(f"Отримані дані: {input_data.model_dump()}")
+    print(f"Received data: {input_data.model_dump()}")
     
-    # Тимчасова відповідь для тестування (Під-фаза 1.2)
+    # Temporary response for testing (Sub-phase 1.2)
     return {
         "status": "OK",
-        "message": "Дані успішно отримано. Готуємося до запуску AI-агентів.",
+        "message": "Data received successfully. Preparing AI agents for launch.",
         "data_received": input_data.model_dump()
     }
 

@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 
 const CampaignForm = ({ onSubmit }) => {
-  // Визначення початкового стану, що відповідає Pydantic-моделі
+  // Define initial state matching Pydantic model
   const [formData, setFormData] = useState({
     business_name: '',
     product_service: '',
     target_audience: '',
-    campaign_goal: 'awareness', // Значення за замовчуванням
-    desired_tone: 'professional', // Значення за замовчуванням
+    campaign_goal: 'awareness', // Default value
+    desired_tone: 'professional', // Default value
     campaign_theme: '', 
     num_posts: 3,
   });
@@ -25,18 +25,18 @@ const CampaignForm = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Блокування форми та показ завантаження
+    // Block form and show loading
     setIsSubmitting(true);
     setStatus({ success: null, message: '' });
 
     try {
-      // Викликаємо функцію onSubmit, яка відправить дані на FastAPI
+      // Call onSubmit function which will send data to FastAPI
       await onSubmit(formData);
     } catch (error) {
-      console.error('Помилка при відправці форми:', error);
+      console.error('Error submitting form:', error);
       setStatus({ 
         success: false, 
-        message: 'Помилка при відправці даних на сервер' 
+        message: 'Error sending data to server' 
       });
     } finally {
       setIsSubmitting(false);

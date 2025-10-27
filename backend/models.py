@@ -2,30 +2,30 @@ from pydantic import BaseModel, Field
 from typing import Literal, Optional
 
 class CampaignInput(BaseModel):
-    """Модель Pydantic для валідації вхідних даних від користувача."""
+    """Pydantic model for validating user input data."""
 
-    business_name: str = Field(..., description="Назва компанії або бренду.")
-    product_service: str = Field(..., description="Короткий опис продукту чи послуги.")
-    target_audience: str = Field(..., description="Детальний опис цільової аудиторії.")
+    business_name: str = Field(..., description="Company or brand name.")
+    product_service: str = Field(..., description="Brief description of product or service.")
+    target_audience: str = Field(..., description="Detailed description of target audience.")
 
-    # Використовуємо Literal для фіксованих, валідованих значень
-    campaign_goal: Literal['sales', 'engagement', 'traffic', 'awareness'] = Field(..., description="Головна мета маркетингової кампанії.")
-    desired_tone: Literal['professional', 'friendly', 'sarcastic', 'inspirational', 'humorous'] = Field(..., description="Бажаний тон контенту.")
+    # Use Literal for fixed, validated values
+    campaign_goal: Literal['sales', 'engagement', 'traffic', 'awareness'] = Field(..., description="Main marketing campaign goal.")
+    desired_tone: Literal['professional', 'friendly', 'sarcastic', 'inspirational', 'humorous'] = Field(..., description="Desired content tone.")
 
-    # Опціональні поля
-    campaign_theme: Optional[str] = Field(None, description="Конкретна тема або подія (наприклад, 'Spring Sale').")
-    num_posts: Literal[3, 4, 5] = Field(3, description="Кількість постів для генерації.")
+    # Optional fields
+    campaign_theme: Optional[str] = Field(None, description="Specific theme or event (e.g., 'Spring Sale').")
+    num_posts: Literal[3, 4, 5] = Field(3, description="Number of posts to generate.")
 
     class Config:
-        # Дозволяє використовувати Pydantic як джерело схеми для OpenAPI
+        # Allow using Pydantic as schema source for OpenAPI
         json_schema_extra = {
             "example": {
                 "business_name": "ProForma Labs",
-                "product_service": "Кастомні 3D-прототипи з біопластику",
-                "target_audience": "Інженери та дизайнери 30-45 років, які цінують екологічність",
+                "product_service": "Custom 3D prototypes from bioplastic",
+                "target_audience": "Engineers and designers aged 30-45 who value sustainability",
                 "campaign_goal": "awareness",
                 "desired_tone": "professional",
-                "campaign_theme": "Запуск нової лінійки біопластику PLA-Pro",
+                "campaign_theme": "Launch of new bioplastic PLA-Pro line",
                 "num_posts": 3
             }
         }

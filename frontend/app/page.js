@@ -15,7 +15,7 @@ export default function Home() {
     setError(null);
 
     try {
-      console.log('Відправка даних на FastAPI:', formData);
+      console.log('Sending data to FastAPI:', formData);
 
       const res = await fetch(API_ENDPOINTS.generate, {
         method: 'POST',
@@ -28,12 +28,12 @@ export default function Home() {
       const result = await res.json();
 
       if (res.ok) {
-        console.log('Дані успішно відправлено на FastAPI:', result);
+        console.log('Data successfully sent to FastAPI:', result);
         setResponse(result);
-        // Тут на Фазі 4 ми перенаправимо користувача на Dashboard
+        // In Phase 4 we will redirect user to Dashboard
       } else {
-        // Обробка помилок валідації від FastAPI (422 Unprocessable Entity)
-        console.error('Помилка від Backend:', result);
+        // Handle validation errors from FastAPI (422 Unprocessable Entity)
+        console.error('Error from Backend:', result);
         const errorMessage = Array.isArray(result.detail) 
           ? result.detail[0].msg || 'Помилка API'
           : result.detail || 'Помилка відправки даних';
@@ -45,13 +45,13 @@ export default function Home() {
         });
       }
     } catch (error) {
-      console.error('Помилка мережі:', error);
+      console.error('Network error:', error);
       setError({
         status: 'ERROR',
-        message: "Не вдалося з'єднатися з сервером.",
+        message: "Could not connect to server.",
         error: error.message,
       });
-      // Перекидаємо помилку, щоб форма могла її обробити
+      // Re-throw error so form can handle it
       throw error;
     } finally {
       setLoading(false);
