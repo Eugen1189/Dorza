@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 const PostCard = ({ postData, index }) => {
   const [activePlatform, setActivePlatform] = useState('facebook');
+  const [copySuccess, setCopySuccess] = useState('');
 
   const platforms = {
     facebook: { name: 'Facebook', icon: '📘', color: 'bg-blue-600' },
@@ -15,30 +16,31 @@ const PostCard = ({ postData, index }) => {
   // Get current text based on active platform
   const currentText = postData[`${activePlatform}_text`];
 
-  const copyToClipboard = (text) => {
+  const copyToClipboard = (text, label) => {
     navigator.clipboard.writeText(text).then(() => {
-      alert('Copied to clipboard!');
+      setCopySuccess(`${label} copiato!`);
+      setTimeout(() => setCopySuccess(''), 3000);
     });
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden border-2 border-gray-200">
+    <div className="glass-premium rounded-3xl shadow-2xl overflow-hidden border-2 border-emerald-500/30">
       {/* Post Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6">
-        <h3 className="text-2xl font-bold">Post #{index + 1}</h3>
+      <div className="bg-gradient-to-r from-emerald-500 to-green-600 text-white p-6">
+        <h3 className="text-3xl font-black">Post #{index}</h3>
       </div>
 
       <div className="p-6">
         {/* Platform Tabs */}
-        <div className="flex flex-wrap gap-2 mb-6 border-b-2 pb-2">
+        <div className="flex flex-wrap gap-3 mb-6 border-b-2 pb-4 border-emerald-500/30">
           {Object.entries(platforms).map(([key, platform]) => (
             <button
               key={key}
               onClick={() => setActivePlatform(key)}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all duration-200 ${
+              className={`px-5 py-3 rounded-xl font-bold transition-all duration-300 ${
                 activePlatform === key
-                  ? `${platform.color} text-white shadow-lg scale-105`
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? `${platform.color} text-white shadow-xl scale-105 glow-green`
+                  : 'glass text-emerald-200 hover:bg-emerald-900/30 border border-emerald-500/30'
               }`}
             >
               <span className="mr-2">{platform.icon}</span>
@@ -48,59 +50,64 @@ const PostCard = ({ postData, index }) => {
         </div>
 
         {/* Content Display with Copy Button */}
-        <div className="bg-gray-50 p-6 rounded-lg mb-4 min-h-[200px] relative border-2 border-gray-200">
-          <div className="flex justify-between items-center mb-3">
-            <div className="font-bold text-gray-700 text-sm uppercase tracking-wide">
-              {platforms[activePlatform].name} Content:
+        <div className="glass p-6 rounded-2xl mb-6 min-h-[200px] relative border border-emerald-500/30 bg-emerald-900/10">
+          <div className="flex justify-between items-center mb-4">
+            <div className="font-bold text-emerald-300 text-sm uppercase tracking-wider">
+              {platforms[activePlatform].name} Contenuto:
             </div>
             <button
-              onClick={() => copyToClipboard(currentText)}
-              className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm flex items-center gap-2"
+              onClick={() => copyToClipboard(currentText, 'Contenuto')}
+              className="px-4 py-2 glass rounded-lg hover:bg-emerald-900/30 transition-all duration-300 text-emerald-200 font-semibold text-sm flex items-center gap-2 border border-emerald-500/50"
             >
-              📋 Copy
+              Copia
             </button>
           </div>
-          <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">
+          {copySuccess && (
+            <div className="mb-3 p-3 bg-emerald-500/30 rounded-lg text-emerald-200 text-sm text-center border border-emerald-400/50">
+              {copySuccess}
+            </div>
+          )}
+          <div className="whitespace-pre-wrap text-emerald-50 leading-relaxed font-light text-base">
             {currentText}
           </div>
         </div>
 
         {/* Additional Info */}
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-6">
           {/* Image Prompt */}
-          <div className="bg-purple-50 p-4 rounded-lg border-2 border-purple-200 relative">
-            <div className="flex justify-between items-center mb-2">
-              <div className="font-bold text-sm text-purple-800 flex items-center gap-2">
-                🖼️ Image Prompt
+          <div className="glass p-5 rounded-2xl border border-emerald-500/40 bg-emerald-900/10 relative">
+            <div className="flex justify-between items-center mb-3">
+              <div className="font-bold text-sm text-emerald-300 flex items-center gap-2 uppercase tracking-wide">
+                Immagine Prompt
               </div>
               <button
-                onClick={() => copyToClipboard(postData.image_prompt)}
-                className="px-2 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 transition text-xs"
+                onClick={() => copyToClipboard(postData.image_prompt, 'Prompt')}
+                className="px-3 py-1.5 glass rounded-lg hover:bg-emerald-900/30 transition-all duration-300 text-emerald-200 text-xs border border-emerald-500/50"
               >
-                📋
+                Copia
               </button>
             </div>
-            <div className="text-purple-900 text-sm italic leading-relaxed">
+            <div className="text-emerald-100 text-sm italic leading-relaxed font-light">
               {postData.image_prompt}
             </div>
           </div>
 
           {/* Hashtags */}
-          <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-200 relative">
+          <div className="glass p-5 rounded-2xl border border-emerald-500/40 bg-emerald-900/10 relative">
             <div className="flex justify-between items-center mb-3">
-              <div className="font-bold text-sm text-blue-800 flex items-center gap-2">
-                # Hashtags
+              <div className="font-bold text-sm text-emerald-300 flex items-center gap-2 uppercase tracking-wide">
+                Hashtags
               </div>
               <button
-                onClick={() => copyToClipboard(postData.suggested_hashtags)}
-                className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-xs"
+                onClick={() => copyToClipboard(postData.suggested_hashtags, 'Hashtags')}
+                className="px-3 py-1.5 glass rounded-lg hover:bg-emerald-900/30 transition-all duration-300 text-emerald-200 text-xs border border-emerald-500/50"
               >
-                📋
+                Copia
               </button>
             </div>
-            <div className="text-blue-900 flex flex-wrap gap-2">
+            <div className="text-emerald-100 flex flex-wrap gap-2">
               {postData.suggested_hashtags.split(' ').map((tag, idx) => (
-                <span key={idx} className="bg-blue-200 px-3 py-1 rounded-full text-sm font-medium">
+                <span key={idx} className="bg-emerald-900/40 px-3 py-1.5 rounded-full text-sm font-medium border border-emerald-500/30">
                   {tag}
                 </span>
               ))}
