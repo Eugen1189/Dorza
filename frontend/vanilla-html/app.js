@@ -1,6 +1,8 @@
 // app.js
 
-const API_ENDPOINT = "http://127.0.0.1:8000/api/generate"; // Переконайтеся, що порт співпадає з вашим Uvicorn
+// Production API endpoint (Railway)
+// For local testing, change to: "http://127.0.0.1:8000/api/generate"
+const API_ENDPOINT = "https://beneficial-playfulness.up.railway.app/api/generate";
 
 document.getElementById('campaign-form').addEventListener('submit', async function(event) {
     event.preventDefault();
