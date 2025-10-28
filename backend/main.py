@@ -16,10 +16,23 @@ load_dotenv()
 app = FastAPI(title="Dorza AI Campaign Generator API", version="0.1.0")
 
 # CORS configuration for frontend
+# Allow all origins for local testing (including file:// protocol)
+# Note: When allow_origins=["*"], allow_credentials must be False
+origins = [
+    "http://localhost:3000",
+    "http://localhost:3001", 
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+    "http://127.0.0.1:8080",
+    "http://127.0.0.1:8000",
+    "*",  # Fallback for file:// protocol and other origins
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://localhost:5173"],  # Next.js, Vite and other ports
-    allow_credentials=True,
+    allow_origin_regex=r".*",  # Allow any origin pattern for local testing
+    allow_credentials=False,  # Must be False when using wildcard/regex
     allow_methods=["*"],
     allow_headers=["*"],
 )
