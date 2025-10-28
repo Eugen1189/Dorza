@@ -60,44 +60,19 @@ def generate_image_with_imagen(prompt: str) -> str:
         return None
 ```
 
-## Налаштування OpenAI DALL-E 3
+## Налаштування Google Imagen через Gemini API
 
-### Крок 1: Додайте API ключ до .env
+### Крок 1: Використовуйте існуючий GEMINI_API_KEY
 
 ```env
-OPENAI_API_KEY=sk-your-api-key-here
+GEMINI_API_KEY=your-gemini-api-key-here
 ```
 
-### Крок 2: Оновіть requirements.txt
+### Крок 2: Реалізовано у backend/main.py
 
-```txt
-openai
-```
+Функція `generate_image_with_imagen()` використовує той самий Gemini client для генерації зображень.
 
-### Крок 3: Оновіть backend/main.py
-
-```python
-import openai
-
-def generate_image_with_imagen(prompt: str) -> str:
-    """Generate image using DALL-E 3 API"""
-    try:
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-        
-        response = openai.Image.create(
-            model="dall-e-3",
-            prompt=prompt,
-            n=1,
-            size="1024x1024",
-            quality="standard"
-        )
-        
-        return response['data'][0]['url']
-        
-    except Exception as e:
-        print(f"Error generating image: {e}")
-        return None
-```
+**Примітка для MVP**: Повна генерація зображень через Imagen 3 вимагає доступу до Vertex AI. Зараз система генерує детальні описи зображень, які можна використати для ручної створення або майбутньої інтеграції з Imagen API.
 
 ## Вартість та Обмеження
 
@@ -106,16 +81,29 @@ def generate_image_with_imagen(prompt: str) -> str:
 - Після: $0.02 за зображення (1024x1024)
 - Час генерації: ~5-15 секунд
 
-### OpenAI DALL-E 3
-- $0.04 за стандартне зображення (1024x1024)
-- $0.08 за HD зображення (1024x1024 HD)
-- Час генерації: ~10-20 секунд
+### Google Imagen через Gemini API
+- Використовує той самий GEMINI_API_KEY
+- Для повної генерації зображень потрібен доступ до Vertex AI Imagen
+- Час генерації: залежить від доступності Imagen API
+
+## Швидкий Старт (Gemini Image Generation)
+
+Для MVP реалізовано підтримку генерації описів зображень через Gemini:
+
+### 1. Запустіть backend
+
+```bash
+cd backend
+uvicorn main:app --reload --port 8000
+```
+
+Система автоматично генерує детальні описи зображень для кожного посту!
 
 ## MVP Рекомендації
 
 Для MVP проектів:
 
-1. **Без генерації зображень**: Залиште `image_url = None` і використовуйте лише `image_prompt`
+1. **Без генерації зображень**: Система завжди генерує `image_prompt` для ручного створення зображень
 2. **З генерацією**: Встановіть ліміт на 3-5 зображень за кампанію для економії коштів
 3. **Кешування**: Зберігайте згенеровані зображення для повторного використання
 

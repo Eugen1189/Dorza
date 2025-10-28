@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dorza AI - Campaign Generator</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+    <header>
+        <h1>Dorza AI</h1>
+        <p>AI-Powered Social Media Strategy Generator</p>
+    </header>
+
+    <main>
+        <section id="input-form">
+            <h2>1. Введіть Деталі Кампанії</h2>
+            <form id="campaign-form">
+                <!-- Секція А: Деталі Бізнесу -->
+                <div class="form-section">
+                    <h3>Деталі Бізнесу</h3>
+                    
+                    <div class="form-group">
+                        <label for="business_name">Назва Бізнесу:</label>
+                        <input type="text" id="business_name" name="business_name" required 
+                               value="TechNova Bioplastics">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product_service">Продукт/Послуга:</label>
+                        <input type="text" id="product_service" name="product_service" required
+                               value="Launch of new bioplastic PLA-Pro Line">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="target_audience">Цільова Аудиторія:</label>
+                        <input type="text" id="target_audience" name="target_audience" required
+                               value="Environmental-focused B2B manufacturers in Canada/Europe.">
+                    </div>
+                </div>
+
+                <!-- Секція Б: Мета та Тон -->
+                <div class="form-section">
+                    <h3>Мета та Тон Кампанії</h3>
+                    
+                    <div class="form-group">
+                        <label for="campaign_goal">Головна Мета:</label>
+                        <select id="campaign_goal" name="campaign_goal" required>
+                            <option value="sales">Продажі</option>
+                            <option value="engagement" selected>Залучення (Engagement)</option>
+                            <option value="traffic">Трафік на сайт</option>
+                            <option value="awareness">Обізнаність</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="desired_tone">Бажаний Тон:</label>
+                        <select id="desired_tone" name="desired_tone" required>
+                            <option value="professional" selected>Професійний</option>
+                            <option value="friendly">Дружній</option>
+                            <option value="humorous">Гумористичний</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="campaign_theme">Тема Кампанії (опціонально)</label>
+                        <input type="text" id="campaign_theme" name="campaign_theme"
+                               placeholder="Запуск нової лінійки біопластику PLA-Pro">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="num_posts">Кількість Ідей Постів:</label>
+                        <select id="num_posts" name="num_posts" required>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-button" class="submit-btn">Згенерувати Кампанію</button>
+            </form>
+        </section>
+
+        <section id="results" style="display: none;"> 
+            <h2>2. Згенерований Контент</h2>
+            
+            <div class="header-actions">
+                <button id="new-campaign-btn" class="secondary-btn">← Створити нову кампанію</button>
+                <button id="export-json-btn" class="primary-btn">📥 Експортувати JSON</button>
+                <button id="export-csv-btn" class="primary-btn">📥 Експортувати CSV</button>
+            </div>
+
+            <div id="summary-section" class="summary-card">
+                <h3>Стратегічне Резюме:</h3>
+                <p id="strategy-summary-text"></p>
+            </div>
+            
+            <div id="posts-container"></div>
+        </section>
+
+        <section id="loading-spinner" style="display: none;">
+            <p>🚀 Генеруємо контент за допомогою ланцюжка AI-агентів... (Це може зайняти до 30 секунд)</p>
+            <div class="spinner"></div> 
+        </section>
+
+        <section id="error-message" style="display: none;">
+            <h3>❌ Помилка генерації!</h3>
+            <p id="error-text">Сталася помилка API або таймаут. Спробуйте ще раз.</p>
+            <button id="retry-btn" class="secondary-btn">Спробувати ще раз</button>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
